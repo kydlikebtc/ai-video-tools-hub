@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronDown, HelpCircle } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 
 const faqs = [
   {
@@ -38,49 +38,49 @@ export default function FAQ() {
   };
 
   return (
-    <section className="py-16 bg-slate-50">
+    <section className="py-16 bg-gray-50">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
+        {/* Header - Dribbble Style */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-100 text-primary-700 mb-4">
-            <HelpCircle className="w-4 h-4" />
-            <span className="text-sm font-medium">FAQ</span>
-          </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
-            Frequently Asked Questions
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">
+            Frequently asked questions
           </h2>
-          <p className="text-lg text-slate-600">
+          <p className="text-gray-500">
             Everything you need to know about AI video tools
           </p>
         </div>
 
-        {/* FAQ Items */}
-        <div className="space-y-4">
+        {/* FAQ Items - Clean Accordion */}
+        <div className="space-y-3">
           {faqs.map((faq, index) => (
             <div
               key={index}
-              className="bg-white rounded-2xl border border-slate-200 overflow-hidden"
+              className="bg-white rounded-2xl border border-gray-100 overflow-hidden"
             >
               <button
                 onClick={() => toggleFAQ(index)}
-                className="w-full flex items-center justify-between p-6 text-left hover:bg-slate-50 transition-colors"
+                className="w-full flex items-center justify-between p-5 text-left hover:bg-gray-50 transition-colors cursor-pointer"
               >
-                <span className="font-semibold text-slate-900 pr-4">
+                <span className="font-medium text-gray-900 pr-4">
                   {faq.question}
                 </span>
                 <ChevronDown
-                  className={`w-5 h-5 text-slate-400 flex-shrink-0 transition-transform ${
+                  className={`w-5 h-5 text-gray-400 flex-shrink-0 transition-transform duration-200 ${
                     openIndex === index ? 'rotate-180' : ''
                   }`}
                 />
               </button>
-              {openIndex === index && (
-                <div className="px-6 pb-6">
-                  <p className="text-slate-600 leading-relaxed">
+              <div
+                className={`overflow-hidden transition-all duration-200 ${
+                  openIndex === index ? 'max-h-96' : 'max-h-0'
+                }`}
+              >
+                <div className="px-5 pb-5">
+                  <p className="text-gray-600 text-sm leading-relaxed">
                     {faq.answer}
                   </p>
                 </div>
-              )}
+              </div>
             </div>
           ))}
         </div>

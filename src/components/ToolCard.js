@@ -1,208 +1,162 @@
 'use client';
 
 import Link from 'next/link';
-import { Star, ExternalLink, TrendingUp, Check, ArrowUpRight, Sparkles } from 'lucide-react';
+import Image from 'next/image';
+import { Heart, Eye } from 'lucide-react';
+import { useState } from 'react';
 
-export default function ToolCard({ tool, featured = false }) {
+export default function ToolCard({ tool }) {
+  const [isLiked, setIsLiked] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [imageError, setImageError] = useState(false);
+
   const {
     name,
     slug,
     tagline,
-    description,
     pricing,
     rating,
     reviews,
-    category,
-    tags,
-    affiliateLink,
-    trending,
-    bestFor
+    thumbnail,
+    logo,
   } = tool;
 
-  // 追踪联盟链接点击
-  const trackAffiliateClick = () => {
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('event', 'affiliate_click', {
-        tool_name: name,
-        tool_slug: slug,
-        category: category
-      });
-    }
+  // Generate gradient based on tool name for fallback
+  const gradients = {
+    'S': 'from-violet-400 to-purple-500',
+    'H': 'from-blue-400 to-indigo-500',
+    'R': 'from-rose-400 to-pink-500',
+    'I': 'from-amber-400 to-orange-500',
+    'P': 'from-emerald-400 to-teal-500',
+    'V': 'from-indigo-400 to-blue-500',
+    'D': 'from-pink-400 to-rose-500',
+    'C': 'from-cyan-400 to-blue-500',
+    'K': 'from-purple-400 to-indigo-500',
   };
-
-  const renderStars = (rating) => {
-    const stars = [];
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 >= 0.5;
-
-    for (let i = 0; i < 5; i++) {
-      if (i < fullStars) {
-        stars.push(
-          <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-        );
-      } else if (i === fullStars && hasHalfStar) {
-        stars.push(
-          <Star key={i} className="w-4 h-4 fill-amber-400/50 text-amber-400" />
-        );
-      } else {
-        stars.push(
-          <Star key={i} className="w-4 h-4 text-slate-200" />
-        );
-      }
-    }
-    return stars;
-  };
+  const gradient = gradients[name.charAt(0)] || 'from-gray-400 to-gray-500';
 
   const formatPrice = (pricing) => {
     if (!pricing) return 'Contact';
     if (pricing.startingPrice === 0) return 'Free';
-    return `$${pricing.startingPrice}`;
+    return `$${pricing.startingPrice}/mo`;
   };
 
-  // 根据工具名生成渐变色
-  const gradients = {
-    'S': 'from-violet-500 to-purple-600',
-    'H': 'from-blue-500 to-cyan-500',
-    'R': 'from-rose-500 to-pink-600',
-    'I': 'from-orange-500 to-amber-500',
-    'P': 'from-emerald-500 to-teal-500',
-    'V': 'from-indigo-500 to-blue-600',
-    'D': 'from-fuchsia-500 to-pink-500',
-    'C': 'from-cyan-500 to-blue-500',
-    'K': 'from-purple-500 to-violet-600',
-  };
-  const gradient = gradients[name.charAt(0)] || 'from-primary-500 to-accent-500';
+  // Check if we have a valid thumbnail
+  const hasThumbnail = thumbnail && !imageError;
 
   return (
-    <div className={`group relative bg-white rounded-2xl border transition-all duration-500 overflow-hidden ${
-      featured
-        ? 'border-primary-200 shadow-xl shadow-primary-500/10 ring-1 ring-primary-500/10'
-        : 'border-slate-200/80 shadow-lg shadow-slate-900/5 hover:shadow-xl hover:shadow-slate-900/10 hover:border-slate-300/80'
-    } hover:-translate-y-2`}>
-
-      {/* Featured 标识 */}
-      {featured && (
-        <div className="absolute top-0 right-0">
-          <div className="relative">
-            <div className="absolute top-3 -right-8 bg-gradient-to-r from-primary-500 to-accent-500 text-white text-xs font-bold px-10 py-1 rotate-45 shadow-lg">
-              TOP PICK
+    <div
+      className="group cursor-pointer"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* Thumbnail - Dribbble Style */}
+      <div className="relative aspect-[4/3] rounded-2xl overflow-hidden mb-4 bg-gray-100">
+        {/* Thumbnail Image or Gradient Fallback */}
+        {hasThumbnail ? (
+          <Image
+            src={thumbnail}
+            alt={`${name} screenshot`}
+            fill
+            className="object-cover"
+            onError={() => setImageError(true)}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+          />
+        ) : (
+          <>
+            {/* Gradient Fallback Background */}
+            <div className={`absolute inset-0 bg-gradient-to-br ${gradient}`} />
+            {/* Tool Initial */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="text-6xl font-bold text-white/90">{name.charAt(0)}</span>
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* 悬停时的光效 */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary-500/50 to-transparent" />
-        <div className="absolute -top-32 -left-32 w-64 h-64 bg-gradient-radial from-primary-500/10 to-transparent rounded-full blur-2xl" />
-      </div>
-
-      <div className="relative p-6">
-        {/* Header */}
-        <div className="flex items-start gap-4 mb-4">
-          {/* Logo */}
-          <div className="relative flex-shrink-0">
-            <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-display font-bold text-xl shadow-lg`}>
-              {name.charAt(0)}
-            </div>
-            {trending && (
-              <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
-                <TrendingUp className="w-3 h-3 text-white" />
-              </div>
-            )}
-          </div>
-
-          {/* Title & Tagline */}
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2">
-              <h3 className="font-display font-bold text-lg text-slate-900 group-hover:text-primary-600 transition-colors truncate">
-                {name}
-              </h3>
-              {trending && (
-                <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-amber-100 to-orange-100 text-amber-700 text-xs font-semibold">
-                  <TrendingUp className="w-3 h-3" />
-                  Hot
-                </span>
-              )}
-            </div>
-            <p className="text-sm text-slate-500 truncate">{tagline}</p>
-          </div>
-        </div>
-
-        {/* Description */}
-        <p className="text-slate-600 text-sm mb-4 line-clamp-2 leading-relaxed">
-          {description}
-        </p>
-
-        {/* Tags */}
-        <div className="flex flex-wrap gap-1.5 mb-4">
-          {tags.slice(0, 3).map((tag) => (
-            <span
-              key={tag}
-              className="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 text-xs font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors cursor-default"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        {/* Best For */}
-        {bestFor && (
-          <div className="flex items-start gap-2 mb-4 p-3 rounded-xl bg-gradient-to-br from-green-50 to-emerald-50 border border-green-100">
-            <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-0.5">
-              <Check className="w-3 h-3 text-white" />
-            </div>
-            <p className="text-sm text-green-800">
-              <span className="font-semibold">Best for:</span> {bestFor}
-            </p>
-          </div>
+          </>
         )}
 
-        {/* Rating & Price */}
-        <div className="flex items-center justify-between py-4 border-t border-slate-100">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-0.5">
-              {renderStars(rating)}
+        {/* Hover Overlay - Dribbble Style */}
+        <div
+          className={`absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent transition-opacity duration-200 ${
+            isHovered ? 'opacity-100' : 'opacity-0'
+          }`}
+        >
+          {/* Action Buttons */}
+          <div className={`absolute bottom-4 left-4 right-4 flex items-center justify-between transition-all duration-200 ${
+            isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+          }`}>
+            <Link
+              href={`/tool/${slug}`}
+              className="px-4 py-2 rounded-lg bg-white/95 text-gray-900 text-sm font-medium hover:bg-white transition-colors"
+            >
+              View Details
+            </Link>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setIsLiked(!isLiked);
+                }}
+                className={`p-2.5 rounded-lg transition-colors cursor-pointer ${
+                  isLiked
+                    ? 'bg-dribbble-500 text-white'
+                    : 'bg-white/95 text-gray-600 hover:text-dribbble-500'
+                }`}
+              >
+                <Heart className={`w-4 h-4 ${isLiked ? 'fill-current' : ''}`} />
+              </button>
             </div>
-            <span className="text-sm font-medium text-slate-700">
-              {rating}
-            </span>
-            <span className="text-sm text-slate-400">
-              ({reviews.toLocaleString()})
-            </span>
-          </div>
-          <div className="text-right">
-            <span className="text-xl font-display font-bold text-slate-900">
-              {formatPrice(pricing)}
-            </span>
-            {pricing?.freeTrial && (
-              <span className="block text-xs font-medium text-green-600">Free trial</span>
-            )}
-            {pricing?.startingPrice > 0 && (
-              <span className="block text-xs text-slate-400">/month</span>
-            )}
           </div>
         </div>
 
-        {/* Actions */}
-        <div className="flex gap-3 pt-2">
-          <Link
-            href={`/tool/${slug}`}
-            className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-all"
-          >
-            Details
-          </Link>
-          <a
-            href={affiliateLink}
-            target="_blank"
-            rel="noopener noreferrer sponsored"
-            onClick={trackAffiliateClick}
-            data-affiliate="true"
-            className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-white bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40 transition-all hover:scale-[1.02]"
-          >
-            Try Free
-            <ArrowUpRight className="w-4 h-4" />
-          </a>
+        {/* Price Badge */}
+        <div className="absolute top-3 right-3">
+          <span className="px-2.5 py-1 rounded-full bg-white/95 text-gray-900 text-xs font-semibold shadow-sm">
+            {formatPrice(pricing)}
+          </span>
+        </div>
+      </div>
+
+      {/* Content - Dribbble Style */}
+      <div className="flex items-start justify-between gap-3">
+        {/* Tool Info */}
+        <div className="flex items-center gap-3 min-w-0">
+          {/* Avatar/Logo */}
+          <div className={`w-9 h-9 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0 ${!logo ? `bg-gradient-to-br ${gradient}` : 'bg-gray-100'}`}>
+            {logo ? (
+              <Image
+                src={logo}
+                alt={`${name} logo`}
+                width={36}
+                height={36}
+                className="object-contain"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                }}
+              />
+            ) : (
+              <span className="text-sm font-bold text-white">{name.charAt(0)}</span>
+            )}
+          </div>
+          <div className="min-w-0">
+            <Link href={`/tool/${slug}`} className="block">
+              <h3 className="font-semibold text-gray-900 text-sm truncate hover:text-dribbble-500 transition-colors">
+                {name}
+              </h3>
+            </Link>
+            <p className="text-xs text-gray-500 truncate">{tagline}</p>
+          </div>
+        </div>
+
+        {/* Stats */}
+        <div className="flex items-center gap-3 text-gray-400 flex-shrink-0">
+          <div className="flex items-center gap-1">
+            <Heart className="w-3.5 h-3.5" />
+            <span className="text-xs">{Math.floor(rating * 100)}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Eye className="w-3.5 h-3.5" />
+            <span className="text-xs">{reviews >= 1000 ? `${(reviews/1000).toFixed(1)}k` : reviews}</span>
+          </div>
         </div>
       </div>
     </div>

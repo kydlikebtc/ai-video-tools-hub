@@ -28,6 +28,7 @@ Perfect for training videos, product demos, marketing content, and internal comm
     affiliateLink: 'https://www.synthesia.io/?via=YOUR_AFFILIATE_ID',
     affiliateProgram: 'https://www.synthesia.io/partners',
     logo: '/logos/synthesia.svg',
+    thumbnail: '/thumbnails/synthesia.jpg',
     pricing: {
       type: 'subscription',
       startingPrice: 22,
@@ -100,6 +101,7 @@ HeyGen's Video Agent (beta) can even automate entire video workflows, making it 
     affiliateLink: 'https://www.heygen.com/?via=YOUR_AFFILIATE_ID',
     affiliateProgram: 'https://www.heygen.com/affiliate',
     logo: '/logos/heygen.svg',
+    thumbnail: '/thumbnails/heygen.jpg',
     pricing: {
       type: 'subscription',
       startingPrice: 29,
@@ -172,6 +174,7 @@ Used by major film studios and independent creators alike, Runway is pushing the
     affiliateLink: 'https://runwayml.com/?ref=YOUR_AFFILIATE_ID',
     affiliateProgram: 'https://runwayml.com/affiliate',
     logo: '/logos/runway.svg',
+    thumbnail: '/thumbnails/runway.jpg',
     pricing: {
       type: 'subscription',
       startingPrice: 15,
@@ -249,6 +252,7 @@ Perfect for social media creators, marketers, and teams who need to produce lots
     affiliateLink: 'https://www.veed.io/?via=YOUR_AFFILIATE_ID',
     affiliateProgram: 'https://www.veed.io/affiliates',
     logo: '/logos/veed.svg',
+    thumbnail: '/thumbnails/veed.jpg',
     pricing: {
       type: 'subscription',
       startingPrice: 18,
@@ -322,6 +326,7 @@ Particularly popular with YouTubers, faceless channel creators, and marketers wh
     affiliateLink: 'https://invideo.io/?ref=YOUR_AFFILIATE_ID',
     affiliateProgram: 'https://invideo.io/affiliates',
     logo: '/logos/invideo.svg',
+    thumbnail: '/thumbnails/invideo.jpg',
     pricing: {
       type: 'subscription',
       startingPrice: 25,
@@ -394,6 +399,7 @@ Pika's approachable interface and fun output make it particularly popular for so
     affiliateLink: 'https://pika.art/?ref=YOUR_AFFILIATE_ID',
     affiliateProgram: 'Contact partnerships@pika.art',
     logo: '/logos/pika.svg',
+    thumbnail: '/thumbnails/pika.jpg',
     pricing: {
       type: 'subscription',
       startingPrice: 10,
@@ -467,6 +473,7 @@ Kling is particularly impressive for realistic human motion, complex scenes, and
     affiliateLink: 'https://klingai.com/?ref=YOUR_AFFILIATE_ID',
     affiliateProgram: 'Contact for partnership',
     logo: '/logos/kling.svg',
+    thumbnail: '/thumbnails/kling.jpg',
     pricing: {
       type: 'subscription',
       startingPrice: 5,
@@ -541,6 +548,7 @@ Used by companies including Novartis, Paramount, and Heineken to create training
     affiliateLink: 'https://www.colossyan.com/?via=YOUR_AFFILIATE_ID',
     affiliateProgram: 'https://www.colossyan.com/partners',
     logo: '/logos/colossyan.svg',
+    thumbnail: '/thumbnails/colossyan.jpg',
     pricing: {
       type: 'subscription',
       startingPrice: 27,
@@ -615,6 +623,7 @@ Perfect for podcasters, YouTubers, and anyone who finds traditional video editin
     affiliateLink: 'https://www.descript.com/?via=YOUR_AFFILIATE_ID',
     affiliateProgram: 'https://www.descript.com/affiliates',
     logo: '/logos/descript.svg',
+    thumbnail: '/thumbnails/descript.jpg',
     pricing: {
       type: 'subscription',
       startingPrice: 15,
@@ -691,6 +700,7 @@ At $10/month for Canva Pro, it's incredible value if you need both design and vi
     affiliateLink: 'https://partner.canva.com/YOUR_AFFILIATE_ID',
     affiliateProgram: 'https://partner.canva.com',
     logo: '/logos/canva.svg',
+    thumbnail: '/thumbnails/canva.jpg',
     pricing: {
       type: 'subscription',
       startingPrice: 10,
@@ -765,6 +775,7 @@ Perfect for e-commerce brands, performance marketers, and agencies running video
     affiliateLink: 'https://creatify.ai/?ref=YOUR_AFFILIATE_ID',
     affiliateProgram: 'https://creatify.ai/affiliate',
     logo: '/logos/creatify.svg',
+    thumbnail: '/thumbnails/creatify.jpg',
     pricing: {
       type: 'subscription',
       startingPrice: 39,
@@ -838,6 +849,7 @@ OpenArt is particularly good for creators who want to experiment with different 
     affiliateLink: 'https://openart.ai/?ref=YOUR_AFFILIATE_ID',
     affiliateProgram: 'Contact for affiliate program',
     logo: '/logos/openart.svg',
+    thumbnail: '/thumbnails/openart.jpg',
     pricing: {
       type: 'subscription',
       startingPrice: 12,
