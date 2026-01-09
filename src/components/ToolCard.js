@@ -45,10 +45,12 @@ export default function ToolCard({ tool }) {
   const hasThumbnail = thumbnail && !imageError;
 
   return (
-    <div
+    <article
       className="group cursor-pointer"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      itemScope
+      itemType="https://schema.org/SoftwareApplication"
     >
       {/* Thumbnail - Dribbble Style */}
       <div className="relative aspect-[4/3] rounded-2xl overflow-hidden mb-4 bg-gray-100">
@@ -56,11 +58,16 @@ export default function ToolCard({ tool }) {
         {hasThumbnail ? (
           <Image
             src={thumbnail}
-            alt={`${name} screenshot`}
+            alt={`${name} - AI video tool interface screenshot showing key features`}
+            title={`${name}: ${tagline}`}
             fill
             className="object-cover"
             onError={() => setImageError(true)}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            loading="lazy"
+            quality={85}
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAMH/8QAHxAAAgICAgMBAAAAAAAAAAAAAQIDEQAEEiEFMUFR/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAZEQADAAMAAAAAAAAAAAAAAAAAAQIRMUH/2gAMAwEAAhEDEEA/AMxl8lZCrRQYWB7BB9fTlbE5hnYVsJNnB7xjGJo9+h//2Q=="
           />
         ) : (
           <>
@@ -125,25 +132,30 @@ export default function ToolCard({ tool }) {
             {logo ? (
               <Image
                 src={logo}
-                alt={`${name} logo`}
+                alt={`${name} official logo - AI video generation tool`}
+                title={name}
                 width={36}
                 height={36}
                 className="object-contain"
+                loading="lazy"
                 onError={(e) => {
                   e.target.style.display = 'none';
                 }}
               />
             ) : (
-              <span className="text-sm font-bold text-white">{name.charAt(0)}</span>
+              <span className="text-sm font-bold text-white" aria-label={`${name} initial`}>{name.charAt(0)}</span>
             )}
           </div>
           <div className="min-w-0">
             <Link href={`/tool/${slug}`} className="block">
-              <h3 className="font-semibold text-gray-900 text-sm truncate hover:text-dribbble-500 transition-colors">
+              <h3 className="font-semibold text-gray-900 text-sm truncate hover:text-dribbble-500 transition-colors" itemProp="name">
                 {name}
               </h3>
             </Link>
-            <p className="text-xs text-gray-500 truncate">{tagline}</p>
+            <p className="text-xs text-gray-500 truncate" itemProp="description">{tagline}</p>
+            {/* Hidden SEO metadata */}
+            <meta itemProp="applicationCategory" content="MultimediaApplication" />
+            <meta itemProp="operatingSystem" content="Web" />
           </div>
         </div>
 
@@ -159,6 +171,6 @@ export default function ToolCard({ tool }) {
           </div>
         </div>
       </div>
-    </div>
+    </article>
   );
 }

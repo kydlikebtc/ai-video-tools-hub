@@ -26,17 +26,69 @@ export async function generateStaticParams() {
   }));
 }
 
-// 生成动态 metadata
+// 基础 URL 配置
+const SITE_URL = 'https://aivideotoolsxyz.xyz';
+const SITE_NAME = 'AI Video Tools Hub';
+
+// 生成动态 metadata - SEO 优化
 export async function generateMetadata({ params }) {
   const tool = getToolBySlug(params.slug);
   if (!tool) return {};
 
+  // 生成关键词
+  const keywords = [
+    tool.name,
+    `${tool.name} review`,
+    `${tool.name} pricing`,
+    `${tool.name} alternatives`,
+    `${tool.name} vs`,
+    ...tool.tags,
+    'AI video generator',
+    'AI video tools',
+  ];
+
+  // 生成更丰富的描述
+  const description = `${tool.name} review 2025: ${tool.description} Starting at $${tool.pricing.startingPrice}/mo. Rating: ${tool.rating}/5 (${tool.reviews.toLocaleString()} reviews). ${tool.pricing.freeTrial ? 'Free trial available.' : ''} Compare features, pricing, pros & cons.`;
+
   return {
     title: `${tool.name} Review 2025 - Pricing, Features & Alternatives`,
-    description: `${tool.name} review: ${tool.description} Compare pricing, features, pros & cons. ${tool.pricing.freeTrial ? 'Free trial available.' : ''}`,
+    description: description,
+    keywords: keywords,
+    authors: [{ name: SITE_NAME }],
+    // 规范链接
+    alternates: {
+      canonical: `${SITE_URL}/tool/${tool.slug}`,
+    },
     openGraph: {
-      title: `${tool.name} Review - AI Video Tool`,
-      description: tool.description,
+      title: `${tool.name} Review 2025 - AI Video Tool`,
+      description: description,
+      url: `${SITE_URL}/tool/${tool.slug}`,
+      siteName: SITE_NAME,
+      type: 'article',
+      publishedTime: tool.dateAdded,
+      modifiedTime: tool.lastUpdated,
+      images: [
+        {
+          url: `${SITE_URL}/thumbnails/${tool.slug}.jpg`,
+          width: 1200,
+          height: 630,
+          alt: `${tool.name} - AI Video Tool Screenshot`,
+        },
+      ],
+      locale: 'en_US',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${tool.name} Review 2025`,
+      description: tool.tagline,
+      images: [`${SITE_URL}/thumbnails/${tool.slug}.jpg`],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
     },
   };
 }
@@ -420,27 +472,227 @@ export default function ToolDetailPage({ params }) {
         </section>
       )}
 
-      {/* Structured Data */}
+      {/* Structured Data - 完整的 SEO Schema */}
+
+      {/* 1. SoftwareApplication Schema - 软件应用详情 */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'SoftwareApplication',
+            '@id': `${SITE_URL}/tool/${tool.slug}#software`,
             name: tool.name,
             description: tool.description,
-            applicationCategory: 'Multimedia',
-            operatingSystem: 'Web',
+            applicationCategory: 'MultimediaApplication',
+            applicationSubCategory: 'Video Generation',
+            operatingSystem: 'Web Browser',
+            url: tool.website,
+            image: `${SITE_URL}/thumbnails/${tool.slug}.jpg`,
+            screenshot: `${SITE_URL}/thumbnails/${tool.slug}.jpg`,
+            softwareVersion: '2025',
+            datePublished: tool.dateAdded,
+            dateModified: tool.lastUpdated,
             offers: {
-              '@type': 'Offer',
-              price: tool.pricing.startingPrice,
-              priceCurrency: tool.pricing.currency
+              '@type': 'AggregateOffer',
+              priceCurrency: tool.pricing.currency,
+              lowPrice: tool.pricing.startingPrice,
+              highPrice: tool.pricing.plans[tool.pricing.plans.length - 1]?.price === 'Custom'
+                ? tool.pricing.plans[tool.pricing.plans.length - 2]?.price || tool.pricing.startingPrice * 10
+                : tool.pricing.plans[tool.pricing.plans.length - 1]?.price || tool.pricing.startingPrice * 5,
+              offerCount: tool.pricing.plans.length,
+              offers: tool.pricing.plans.map((plan, index) => ({
+                '@type': 'Offer',
+                name: plan.name,
+                price: typeof plan.price === 'number' ? plan.price : 0,
+                priceCurrency: tool.pricing.currency,
+                priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                itemCondition: 'https://schema.org/NewCondition',
+                availability: 'https://schema.org/OnlineOnly',
+                url: tool.affiliateLink,
+              })),
             },
             aggregateRating: {
               '@type': 'AggregateRating',
               ratingValue: tool.rating,
-              reviewCount: tool.reviews
-            }
+              bestRating: 5,
+              worstRating: 1,
+              ratingCount: tool.reviews,
+              reviewCount: tool.reviews,
+            },
+            featureList: tool.features.join(', '),
+            keywords: tool.tags.join(', '),
+            author: {
+              '@type': 'Organization',
+              name: tool.name,
+              url: tool.website,
+            },
+            publisher: {
+              '@type': 'Organization',
+              name: SITE_NAME,
+              url: SITE_URL,
+            },
+          })
+        }}
+      />
+
+      {/* 2. Product Schema - 产品信息（帮助显示富摘要） */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Product',
+            '@id': `${SITE_URL}/tool/${tool.slug}#product`,
+            name: tool.name,
+            description: tool.tagline,
+            image: `${SITE_URL}/thumbnails/${tool.slug}.jpg`,
+            brand: {
+              '@type': 'Brand',
+              name: tool.name,
+            },
+            category: 'Software > AI Video Tools',
+            aggregateRating: {
+              '@type': 'AggregateRating',
+              ratingValue: tool.rating,
+              bestRating: 5,
+              worstRating: 1,
+              reviewCount: tool.reviews,
+            },
+            offers: {
+              '@type': 'Offer',
+              price: tool.pricing.startingPrice,
+              priceCurrency: tool.pricing.currency,
+              priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+              availability: 'https://schema.org/InStock',
+              url: tool.affiliateLink,
+              seller: {
+                '@type': 'Organization',
+                name: tool.name,
+              },
+            },
+            review: {
+              '@type': 'Review',
+              reviewRating: {
+                '@type': 'Rating',
+                ratingValue: tool.rating,
+                bestRating: 5,
+              },
+              author: {
+                '@type': 'Organization',
+                name: SITE_NAME,
+              },
+              reviewBody: `${tool.name} is ${tool.bestFor}. Key features include: ${tool.features.slice(0, 3).join(', ')}. ${tool.pros[0]}`,
+            },
+          })
+        }}
+      />
+
+      {/* 3. BreadcrumbList Schema - 面包屑导航 */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Home',
+                item: SITE_URL,
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Tools',
+                item: `${SITE_URL}/tools`,
+              },
+              {
+                '@type': 'ListItem',
+                position: 3,
+                name: tool.name,
+                item: `${SITE_URL}/tool/${tool.slug}`,
+              },
+            ],
+          })
+        }}
+      />
+
+      {/* 4. Article Schema - 文章/评测信息 */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Article',
+            '@id': `${SITE_URL}/tool/${tool.slug}#article`,
+            headline: `${tool.name} Review 2025 - Pricing, Features & Alternatives`,
+            description: tool.description,
+            image: `${SITE_URL}/thumbnails/${tool.slug}.jpg`,
+            datePublished: tool.dateAdded,
+            dateModified: tool.lastUpdated,
+            author: {
+              '@type': 'Organization',
+              name: SITE_NAME,
+              url: SITE_URL,
+            },
+            publisher: {
+              '@type': 'Organization',
+              name: SITE_NAME,
+              logo: {
+                '@type': 'ImageObject',
+                url: `${SITE_URL}/logo.png`,
+              },
+            },
+            mainEntityOfPage: {
+              '@type': 'WebPage',
+              '@id': `${SITE_URL}/tool/${tool.slug}`,
+            },
+            about: {
+              '@type': 'SoftwareApplication',
+              name: tool.name,
+            },
+            keywords: tool.tags.join(', '),
+            articleSection: 'AI Video Tools',
+            wordCount: tool.longDescription.split(' ').length + 500,
+          })
+        }}
+      />
+
+      {/* 5. FAQ Schema - 如果工具有常见问题 */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: [
+              {
+                '@type': 'Question',
+                name: `How much does ${tool.name} cost?`,
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: `${tool.name} starts at $${tool.pricing.startingPrice}/${tool.pricing.billingPeriod}. ${tool.pricing.freeTrial ? `They offer ${tool.pricing.freeTrialDays > 0 ? `a ${tool.pricing.freeTrialDays}-day free trial` : 'free credits'} to get started.` : ''} Plans include: ${tool.pricing.plans.map(p => `${p.name} ($${typeof p.price === 'number' ? p.price : p.price})`).join(', ')}.`,
+                },
+              },
+              {
+                '@type': 'Question',
+                name: `What are the main features of ${tool.name}?`,
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: `${tool.name}'s key features include: ${tool.features.join(', ')}. It is best suited for ${tool.bestFor}.`,
+                },
+              },
+              {
+                '@type': 'Question',
+                name: `Is ${tool.name} good for ${tool.useCases[0]}?`,
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: `Yes, ${tool.name} is excellent for ${tool.useCases.join(', ')}. With a rating of ${tool.rating}/5 from ${tool.reviews.toLocaleString()} users, it's particularly recommended for ${tool.bestFor}.`,
+                },
+              },
+            ],
           })
         }}
       />

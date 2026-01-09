@@ -6,6 +6,10 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Wand2, User, Film, Target, Filter } from 'lucide-react';
 
+// 基础 URL 配置
+const SITE_URL = 'https://aivideotoolsxyz.xyz';
+const SITE_NAME = 'AI Video Tools Hub';
+
 const categoryIcons = {
   'text-to-video': Wand2,
   'avatar-video': User,
@@ -50,12 +54,42 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }) {
   const info = categoryInfo[params.slug];
-  if (!info) return {};
+  const categoryId = slugToCategoryId[params.slug];
+  if (!info || !categoryId) return {};
+
+  const categoryTools = tools.filter(t => t.category === categoryId);
+  const toolNames = categoryTools.slice(0, 5).map(t => t.name).join(', ');
 
   return {
     title: `${info.title} - Best AI Tools 2025`,
-    description: info.description,
+    description: `${info.description} Compare ${categoryTools.length} tools including ${toolNames}. Find the perfect AI solution for your needs.`,
+    keywords: [
+      info.title,
+      params.slug.replace(/-/g, ' '),
+      'AI video tools',
+      'AI video generator',
+      ...categoryTools.slice(0, 5).map(t => t.name),
+    ],
+    alternates: {
+      canonical: `${SITE_URL}/category/${params.slug}`,
+    },
     openGraph: {
+      title: `${info.title} - Best AI Tools 2025`,
+      description: info.description,
+      url: `${SITE_URL}/category/${params.slug}`,
+      siteName: SITE_NAME,
+      type: 'website',
+      images: [
+        {
+          url: `${SITE_URL}/og-category-${params.slug}.png`,
+          width: 1200,
+          height: 630,
+          alt: info.title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
       title: info.title,
       description: info.description,
     },
@@ -160,6 +194,107 @@ export default function CategoryPage({ params }) {
           )}
         </div>
       </section>
+
+      {/* Structured Data - ItemList Schema 用于分类页面 */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'ItemList',
+            name: info.title,
+            description: info.longDescription,
+            url: `${SITE_URL}/category/${params.slug}`,
+            numberOfItems: categoryTools.length,
+            itemListOrder: 'https://schema.org/ItemListOrderDescending',
+            itemListElement: categoryTools.map((tool, index) => ({
+              '@type': 'ListItem',
+              position: index + 1,
+              name: tool.name,
+              url: `${SITE_URL}/tool/${tool.slug}`,
+              item: {
+                '@type': 'SoftwareApplication',
+                name: tool.name,
+                description: tool.tagline,
+                applicationCategory: 'MultimediaApplication',
+                operatingSystem: 'Web',
+                image: `${SITE_URL}/thumbnails/${tool.slug}.jpg`,
+                offers: {
+                  '@type': 'Offer',
+                  price: tool.pricing.startingPrice,
+                  priceCurrency: tool.pricing.currency,
+                },
+                aggregateRating: {
+                  '@type': 'AggregateRating',
+                  ratingValue: tool.rating,
+                  ratingCount: tool.reviews,
+                  bestRating: 5,
+                  worstRating: 1,
+                },
+              },
+            })),
+          }),
+        }}
+      />
+
+      {/* BreadcrumbList Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Home',
+                item: SITE_URL,
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Categories',
+                item: `${SITE_URL}/tools`,
+              },
+              {
+                '@type': 'ListItem',
+                position: 3,
+                name: info.title,
+                item: `${SITE_URL}/category/${params.slug}`,
+              },
+            ],
+          }),
+        }}
+      />
+
+      {/* CollectionPage Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'CollectionPage',
+            name: info.title,
+            description: info.longDescription,
+            url: `${SITE_URL}/category/${params.slug}`,
+            isPartOf: {
+              '@type': 'WebSite',
+              name: SITE_NAME,
+              url: SITE_URL,
+            },
+            about: {
+              '@type': 'Thing',
+              name: info.title,
+              description: info.description,
+            },
+            mainEntity: {
+              '@type': 'ItemList',
+              numberOfItems: categoryTools.length,
+            },
+          }),
+        }}
+      />
 
       <Footer />
     </main>

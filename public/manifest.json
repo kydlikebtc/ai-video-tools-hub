@@ -1,0 +1,99 @@
+{
+  "name": "AI Video Tools Hub - Best AI Video Generators 2025",
+  "short_name": "AI Video Tools",
+  "description": "Discover and compare 50+ best AI video generator tools. Find perfect AI solutions for text-to-video, AI avatars, and video editing.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#6366f1",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["utilities", "productivity", "education"],
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-192-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/home.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "AI Video Tools Hub Homepage"
+    },
+    {
+      "src": "/screenshots/tools.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "Browse AI Video Tools"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Browse All Tools",
+      "short_name": "Tools",
+      "description": "View all AI video tools",
+      "url": "/tools",
+      "icons": [{ "src": "/icon-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Text to Video",
+      "short_name": "Text2Video",
+      "description": "AI text to video generators",
+      "url": "/category/text-to-video",
+      "icons": [{ "src": "/icon-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "AI Avatars",
+      "short_name": "Avatars",
+      "description": "AI avatar video creators",
+      "url": "/category/ai-avatar",
+      "icons": [{ "src": "/icon-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Compare Tools",
+      "short_name": "Compare",
+      "description": "Compare AI video tools side by side",
+      "url": "/compare",
+      "icons": [{ "src": "/icon-96.png", "sizes": "96x96" }]
+    }
+  ],
+  "prefer_related_applications": false,
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "id": "ai-video-tools-hub",
+  "handle_links": "auto",
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  }
+}
