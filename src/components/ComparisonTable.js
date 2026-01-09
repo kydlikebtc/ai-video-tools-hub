@@ -1,23 +1,36 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { tools } from '@/data/tools';
-import { Check, X, ExternalLink } from 'lucide-react';
+import { Check, X, ExternalLink, ChevronDown, ChevronUp } from 'lucide-react';
 import Link from 'next/link';
 
 export default function ComparisonTable() {
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [showAll, setShowAll] = useState(false);
+  const INITIAL_DISPLAY_COUNT = 10;
 
   const categories = [
     { id: 'all', name: 'All' },
     { id: 'text-to-video', name: 'Text to Video' },
     { id: 'avatar-video', name: 'AI Avatar' },
     { id: 'video-editor', name: 'Video Editor' },
+    { id: 'ad-creator', name: 'Ad Creator' },
   ];
 
-  const filteredTools = selectedCategory === 'all'
-    ? tools.slice(0, 6)
-    : tools.filter(t => t.category === selectedCategory).slice(0, 6);
+  // 获取所有符合筛选条件的工具
+  const allFilteredTools = useMemo(() => {
+    return selectedCategory === 'all'
+      ? tools
+      : tools.filter(t => t.category === selectedCategory);
+  }, [selectedCategory]);
+
+  // 根据是否展开显示工具列表
+  const filteredTools = showAll
+    ? allFilteredTools
+    : allFilteredTools.slice(0, INITIAL_DISPLAY_COUNT);
+
+  const hasMoreTools = allFilteredTools.length > INITIAL_DISPLAY_COUNT;
 
   const trackClick = (toolName) => {
     if (typeof window !== 'undefined' && window.gtag) {
@@ -129,15 +142,32 @@ export default function ComparisonTable() {
           </table>
         </div>
 
-        {/* Full Comparison Link */}
-        <div className="mt-8 text-center">
-          <Link
-            href="/compare"
-            className="inline-flex items-center text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors cursor-pointer"
-          >
-            View full comparison with all features
-            <ExternalLink className="w-4 h-4 ml-1.5" />
-          </Link>
+        {/* Show More / Show Less Button */}
+        {hasMoreTools && (
+          <div className="mt-8 text-center">
+            <button
+              onClick={() => setShowAll(!showAll)}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gray-100 text-gray-700 font-medium hover:bg-gray-200 transition-colors cursor-pointer"
+            >
+              {showAll ? (
+                <>
+                  Show Less
+                  <ChevronUp className="w-4 h-4" />
+                </>
+              ) : (
+                <>
+                  Show All {allFilteredTools.length} Tools
+                  <ChevronDown className="w-4 h-4" />
+                </>
+              )}
+            </button>
+          </div>
+        )}
+
+        {/* Tool Count Info */}
+        <div className="mt-4 text-center text-sm text-gray-500">
+          Showing {filteredTools.length} of {allFilteredTools.length} tools
+          {selectedCategory !== 'all' && ` in ${categories.find(c => c.id === selectedCategory)?.name}`}
         </div>
       </div>
     </section>
