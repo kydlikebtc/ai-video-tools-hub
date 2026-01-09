@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Search, Wand2, Users, Film, Sparkles, Video, Zap } from 'lucide-react';
+import { Search, Wand2, Users, Film, Target } from 'lucide-react';
 
 export default function Hero() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -26,12 +26,10 @@ export default function Hero() {
   ];
 
   const quickCategories = [
-    { icon: Wand2, label: 'Text to Video', count: 12, href: '/category/text-to-video' },
-    { icon: Users, label: 'AI Avatars', count: 8, href: '/category/ai-avatar' },
-    { icon: Film, label: 'Video Editors', count: 15, href: '/category/video-editor' },
-    { icon: Sparkles, label: 'AI Effects', count: 6, href: '/category/ai-effects' },
-    { icon: Video, label: 'Live Stream', count: 4, href: '/category/live-stream' },
-    { icon: Zap, label: 'Quick Clips', count: 10, href: '/category/quick-clips' },
+    { icon: Wand2, label: 'Text to Video', count: 5, href: '/category/text-to-video' },
+    { icon: Users, label: 'AI Avatars', count: 3, href: '/category/ai-avatar' },
+    { icon: Film, label: 'Video Editors', count: 3, href: '/category/video-editor' },
+    { icon: Target, label: 'Ad Creators', count: 1, href: '/category/ad-creator' },
   ];
 
   return (
@@ -100,7 +98,7 @@ export default function Hero() {
         </div>
 
         {/* Quick Categories Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {quickCategories.map((cat) => (
             <Link
               key={cat.label}
