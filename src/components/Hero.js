@@ -26,8 +26,8 @@ export default function Hero() {
   ];
 
   const quickCategories = [
-    { icon: Wand2, label: 'Text to Video', count: 5, href: '/category/text-to-video' },
-    { icon: Users, label: 'AI Avatars', count: 3, href: '/category/ai-avatar' },
+    { icon: Wand2, label: 'Text to Video', count: 11, href: '/category/text-to-video' },
+    { icon: Users, label: 'AI Avatars', count: 8, href: '/category/ai-avatar' },
     { icon: Film, label: 'Video Editors', count: 3, href: '/category/video-editor' },
     { icon: Target, label: 'Ad Creators', count: 1, href: '/category/ad-creator' },
   ];

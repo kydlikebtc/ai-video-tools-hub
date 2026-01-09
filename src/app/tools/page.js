@@ -16,7 +16,7 @@ export default function ToolsPage() {
       <Header />
 
       {/* Page Header */}
-      <section className="bg-white border-b border-slate-200">
+      <section className="bg-white border-b border-slate-200 pt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
             All AI Video Tools
