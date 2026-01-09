@@ -1,4 +1,21 @@
 import './globals.css'
+import { Outfit, DM_Sans } from 'next/font/google'
+
+// 显示字体 - 现代几何感，用于标题
+const outfit = Outfit({
+  subsets: ['latin'],
+  variable: '--font-display',
+  display: 'swap',
+  weight: ['400', '500', '600', '700', '800'],
+})
+
+// 正文字体 - 清晰易读
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  variable: '--font-body',
+  display: 'swap',
+  weight: ['400', '500', '600', '700'],
+})
 
 export const metadata = {
   metadataBase: new URL('https://aivideotoolsxyz.xyz'),
@@ -63,7 +80,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${outfit.variable} ${dmSans.variable}`}>
       <head>
         {/* Google Analytics - 替换 G-XXXXXXXXXX 为你的 GA4 ID */}
         <script
@@ -99,7 +116,13 @@ export default function RootLayout({ children }) {
           }}
         />
       </head>
-      <body className="antialiased">
+      <body className="font-body antialiased bg-slate-50 text-slate-900 selection:bg-primary-500/20 selection:text-primary-900">
+        {/* 全局背景装饰 */}
+        <div className="fixed inset-0 -z-10 overflow-hidden">
+          <div className="absolute -top-1/2 -right-1/4 w-[800px] h-[800px] rounded-full bg-gradient-radial from-primary-500/10 via-primary-500/5 to-transparent blur-3xl" />
+          <div className="absolute -bottom-1/2 -left-1/4 w-[600px] h-[600px] rounded-full bg-gradient-radial from-accent-500/10 via-accent-500/5 to-transparent blur-3xl" />
+          <div className="absolute top-1/3 left-1/2 w-[400px] h-[400px] rounded-full bg-gradient-radial from-electric-500/5 to-transparent blur-3xl" />
+        </div>
         {children}
       </body>
     </html>
