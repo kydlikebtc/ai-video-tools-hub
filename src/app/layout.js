@@ -254,10 +254,10 @@ export default function RootLayout({ children }) {
         <link rel="icon" href="/icon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-        {/* Google Analytics - 替换 G-XXXXXXXXXX 为你的 GA4 ID */}
+        {/* Google Analytics - GA4 */}
         <script
           async
-          src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"
+          src="https://www.googletagmanager.com/gtag/js?id=G-DMH1DCNG0D"
         />
         <script
           dangerouslySetInnerHTML={{
@@ -265,7 +265,7 @@ export default function RootLayout({ children }) {
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', 'G-XXXXXXXXXX');
+              gtag('config', 'G-DMH1DCNG0D');
             `,
           }}
         />
